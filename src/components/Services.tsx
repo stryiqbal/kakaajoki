@@ -76,7 +76,7 @@ className="mx-auto max-w-2xl text-center"
               className="object-cover transition-transform duration-500 group-hover:scale-[1.03] group-focus-visible:scale-[1.03]"
             />
             <span
-              className="absolute inset-x-0 bottom-0 flex min-h-24 translate-y-full flex-col items-start justify-end bg-gradient-to-t from-black/95 via-black/70 to-transparent px-4 pb-4 pt-10 text-left opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100 sm:px-5 sm:pb-5"
+              className="absolute inset-x-0 bottom-0 hidden min-h-24 translate-y-full flex-col items-start justify-end bg-gradient-to-t from-black/95 via-black/70 to-transparent px-4 pb-4 pt-10 text-left opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 sm:flex sm:px-5 sm:pb-5"
             >
               <span className="font-[var(--font-chakra)] text-sm leading-tight text-white sm:text-base">
                 {game.title}
