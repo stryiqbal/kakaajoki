@@ -7,7 +7,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative isolate mt-16 flex min-h-[260px] scroll-mt-16 items-center overflow-hidden bg-[#151517]/50 pb-4 sm:min-h-[420px] sm:mt-[68px] sm:scroll-mt-[68px] sm:pb-6 lg:min-h-[554px] lg:pb-8"
+      className="relative isolate mt-16 flex aspect-[16/9] min-h-0 scroll-mt-16 items-center overflow-hidden bg-[#151517]/50 pb-0 sm:aspect-auto sm:min-h-[420px] sm:mt-[68px] sm:scroll-mt-[68px] sm:pb-6 lg:min-h-[554px] lg:pb-8"
     >
       <motion.div
         initial={{ opacity: 0, scale: 1.06 }}
@@ -16,12 +16,12 @@ export default function Hero() {
         className="absolute inset-0"
       >
         <Image
-          src="/home/hero.png"
+          src="/home/hero.png" 
           alt="Kakaa.Joki, layanan joki Mobile Legends"
           fill
           priority
           sizes="100vw"
-          className="pointer-events-none object-cover object-center sm:object-center"
+          className="pointer-events-none object-cover object-center"
         />
       </motion.div>
       <motion.div

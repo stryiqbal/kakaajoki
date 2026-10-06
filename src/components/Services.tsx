@@ -1,12 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
 import { motion } from "motion/react";
 
 const games = [
 {
-id: "mobile-legends",
+id: "mobile-legends", 
 title: "Mobile Legends: Bang Bang",
 image: "/home/Mobile%20Legends.png?v=20261001",
 },
@@ -21,8 +21,8 @@ export default function Services() {
 const router = useRouter();
 
 return (
-<section id="layanan" className="bg-[radial-gradient(circle_at_top,_rgba(237,16,27,0.1),_transparent_35%)] relative border-t border-white/5 py-20 sm:py-28 px-4 sm:px-6" >
-<div className="mx-auto max-w-7xl px-6 lg:px-8">
+<section id="layanan" className="bg-[radial-gradient(circle_at_top,_rgba(237,16,27,0.1),_transparent_35%)] relative border-t border-white/5 px-4 pt-4 pb-12 sm:px-6 sm:pt-10 sm:pb-16" >
+<div className="mx-auto max-w-7xl">
 <motion.div
 initial={{ opacity: 0, y: 30 }}
 whileInView={{ opacity: 1, y: 0 }}
@@ -45,7 +45,8 @@ className="mx-auto max-w-2xl text-center"
 
     </motion.div>
 
-    <div className="mx-auto mt-10 grid max-w-3xl grid-cols-2 gap-4 sm:gap-7">
+    <div className="mx-auto mt-10 flex w-full justify-center">
+      <div className="grid w-full min-w-0 max-w-[520px] grid-cols-2 gap-3 sm:gap-7 lg:max-w-[700px]">
       {games.map((game, index) => {
         return (
           <motion.button
@@ -88,6 +89,7 @@ className="mx-auto max-w-2xl text-center"
           </motion.button>
         );
       })}
+    </div>
     </div>
   </div>
 </section>

@@ -136,7 +136,7 @@ export default function CalculatorPage() {
             <p className="mt-4 text-xs font-semibold uppercase tracking-[0.16em] text-red-400">
               Kalkulator
             </p>
-            <h1 className="mt-3 font-[var(--font-chakra)] text-2xl font-bold uppercase sm:text-3xl">
+            <h1 className="mt-3 font-[var(--font-chakra)] text-xl font-bold uppercase sm:text-3xl">
               Win Rate Calculator
             </h1>
             <p className="mt-3 text-sm leading-relaxed text-zinc-300">
@@ -164,7 +164,7 @@ export default function CalculatorPage() {
                     value={matches}
                     onChange={(e) => setMatches(e.target.value)}
                     placeholder="Contoh: 223"
-                    className="block h-10 w-full rounded-lg border border-white/10 bg-white/[0.03] px-3.5 text-sm text-white placeholder-zinc-500 transition focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
+                    className="block h-11 w-full rounded-lg border border-white/10 bg-white/[0.03] px-3.5 text-base text-white placeholder-zinc-500 transition focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500 sm:text-sm"
                   />
                 </div>
 
@@ -180,7 +180,7 @@ export default function CalculatorPage() {
                     value={winRate}
                     onChange={(e) => setWinRate(e.target.value)}
                     placeholder="Contoh: 54"
-                    className="block h-10 w-full rounded-lg border border-white/10 bg-white/[0.03] px-3.5 text-sm text-white placeholder-zinc-500 transition focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
+                    className="block h-11 w-full rounded-lg border border-white/10 bg-white/[0.03] px-3.5 text-base text-white placeholder-zinc-500 transition focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500 sm:text-sm"
                   />
                 </div>
 
@@ -196,7 +196,7 @@ export default function CalculatorPage() {
                     value={targetRate}
                     onChange={(e) => setTargetRate(e.target.value)}
                     placeholder="Contoh: 70"
-                    className="block h-10 w-full rounded-lg border border-white/10 bg-white/[0.03] px-3.5 text-sm text-white placeholder-zinc-500 transition focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
+                    className="block h-11 w-full rounded-lg border border-white/10 bg-white/[0.03] px-3.5 text-base text-white placeholder-zinc-500 transition focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500 sm:text-sm"
                   />
                 </div>
               </div>
@@ -211,12 +211,12 @@ export default function CalculatorPage() {
 
             {displayResult && (
               <div
-                className="mt-5 overflow-hidden rounded-xl border border-white/10 bg-white/[0.02] px-4 py-4 text-center text-xs font-bold uppercase leading-relaxed text-white shadow-xl sm:px-6 sm:py-5 sm:text-sm"
+                className="mt-5 w-full min-w-0 max-w-full rounded-xl border border-white/10 bg-white/[0.02] px-3 py-4 text-center text-xs font-bold uppercase leading-relaxed text-white shadow-xl sm:px-6 sm:py-5 sm:text-sm"
                 role={displayResult.status === "invalid" ? "alert" : "status"}
                 aria-live="polite"
               >
                 {displayResult.status === "success" ? (
-                  <p className="w-max min-w-full whitespace-nowrap">
+                  <p className="w-full min-w-0 whitespace-normal break-words">
                     YOU NEED ABOUT{" "}
                     <span className="text-red-400">
                       {displayResult.gamesToWin} WIN WITHOUT LOSE
@@ -227,14 +227,14 @@ export default function CalculatorPage() {
                     </span>
                   </p>
                 ) : displayResult.status === "already_met" ? (
-                  <p className="w-max min-w-full whitespace-nowrap">
+                  <p className="w-full min-w-0 whitespace-normal break-words">
                     WIN RATE SAAT INI SUDAH MENCAPAI ATAU MELEBIHI TARGET{" "}
                     <span className="text-red-400">
                       {formatPercentage(displayResult.desiredRate)}%.
                     </span>
                   </p>
                 ) : (
-                  <p className="w-max min-w-full whitespace-nowrap">
+                  <p className="w-full min-w-0 whitespace-normal break-words">
                     MASUKKAN ANGKA YANG <span className="text-red-400">VALID</span> UNTUK
                     SEMUA FIELD.
                   </p>

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Chakra_Petch, IBM_Plex_Sans_Condensed, Lexend_Deca } from "next/font/google";
+import NextTopLoader from "nextjs-toploader";
 import FloatingCS from "@/components/FloatingCS";
+import HistoryNavigationLoader from "@/components/HistoryNavigationLoader";
 import "./globals.css";
 
 const ibmPlexSansCondensed = IBM_Plex_Sans_Condensed({
@@ -50,6 +52,18 @@ export default function RootLayout({
   return (
     <html lang="id">
       <body className={`${ibmPlexSansCondensed.variable} ${lexendDeca.variable} ${chakraPetch.variable}`}>
+        <NextTopLoader
+          color="#ed101b"
+          initialPosition={0.08}
+          crawlSpeed={200}
+          height={3}
+          crawl={true}
+          showSpinner={false}
+          easing="ease"
+          speed={200}
+          shadow="0 0 10px rgba(237, 16, 27, 0.5), 0 0 5px rgba(237, 16, 27, 0.35)"
+        />
+        <HistoryNavigationLoader />
         {children}
         <FloatingCS />
       </body>

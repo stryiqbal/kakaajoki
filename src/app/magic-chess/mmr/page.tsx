@@ -323,7 +323,7 @@ export default function MagicChessMmrOrderPage() {
 
                   <label className="block space-y-1.5">
                     <span className="block text-xs font-medium text-zinc-300">
-                      User ID & Nick Name{" "}
+                      User ID & Nick Name
                     </span>
                     <input
                       className={inputClassName}
@@ -450,8 +450,18 @@ export default function MagicChessMmrOrderPage() {
                               : "border-white/10 bg-white/[0.02] hover:border-white/25 hover:bg-white/[0.05]"
                           }`}
                         >
-                          <div className="flex w-full items-center justify-between gap-1.5 sm:gap-2">
-                            <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+                          <div className="flex w-full min-w-0 flex-col gap-2">
+                            <div className="flex min-w-0 items-start justify-between gap-1.5">
+                              <p className="min-w-0 text-xs font-medium leading-4 text-zinc-200">
+                                {item.title}
+                              </p>
+                              {isSelected && (
+                                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-600 text-[10px] font-bold text-white shadow-sm">
+                                  <Check size={12} />
+                                </span>
+                              )}
+                            </div>
+                            <div className="flex min-w-0 items-center gap-2">
                               <Image
                                 src={item.imageSrc}
                                 alt={`${item.title.split(" /")[0]} rank`}
@@ -466,20 +476,10 @@ export default function MagicChessMmrOrderPage() {
                                 }}
                                 className="h-9 w-9 shrink-0 object-contain sm:h-12 sm:w-12"
                               />
-                              <div className="min-w-0">
-                                <p className="text-xs font-medium text-zinc-200">
-                                  {item.title}
-                                </p>
-                                <p className="mt-1.5 text-sm font-bold text-red-400">
-                                  Rp {item.price.toLocaleString("id-ID")}
-                                </p>
-                              </div>
+                              <p className="min-w-0 text-xs font-bold text-red-400 sm:text-sm">
+                                Rp {item.price.toLocaleString("id-ID")}
+                              </p>
                             </div>
-                            {isSelected && (
-                              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-600 text-[10px] font-bold text-white shadow-sm">
-                                <Check size={12} />
-                              </span>
-                            )}
                           </div>
                         </button>
                       );
@@ -629,7 +629,7 @@ export default function MagicChessMmrOrderPage() {
 
           {/* Tab Keterangan (Desktop displayed below, Mobile switched via activeTab) */}
           <div
-            className={`mt-10 space-y-8 ${
+            className={`space-y-8 lg:mt-10 pb-4 lg:pb-0 ${
               activeTab === "details" ? "block" : "hidden lg:block"
             }`}
           >

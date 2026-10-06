@@ -6,7 +6,7 @@ const footerLinks = [
   { label: "Layanan", href: "/#layanan" },
   { label: "Kalkulator Win Rate", href: "/calculator" },
 ];
-
+ 
 const socialLinks = [
   { label: "Instagram", href: "https://www.instagram.com/kakaa.joki/" },
   { label: "TikTok", href: "https://www.tiktok.com/@kakaa.joki" },
@@ -19,7 +19,7 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-6 pb-7 pt-12 lg:px-8 lg:pt-16">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.5fr_0.8fr_1fr] lg:gap-16">
           <div>
-            <Link href="/" aria-label="Kakaa.Joki beranda" className="inline-flex items-center gap-3">
+            <a href="/" aria-label="Kakaa.Joki beranda" className="inline-flex items-center gap-3">
               <Image
                 src="/home/logo.png"
                 alt=""
@@ -30,7 +30,7 @@ export default function Footer() {
               <span className="text-lg font-semibold text-white">
                 Kakaa<span className="text-red-400">.</span>Joki
               </span>
-            </Link>
+            </a>
 
             <p className="mt-4 max-w-sm text-sm leading-6 text-zinc-300">
               Jasa joki Mobile Legends cepat, aman, dan profesional.
@@ -44,12 +44,21 @@ export default function Footer() {
             <ul className="mt-4 space-y-3">
               {footerLinks.map((link) => (
                 <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-zinc-300 transition-colors hover:text-red-400"
-                  >
-                    {link.label}
-                  </Link>
+                  {link.href === "/" ? (
+                    <a
+                      href={link.href}
+                      className="text-sm text-zinc-300 transition-colors hover:text-red-400"
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link
+                      href={link.href}
+                      className="text-sm text-zinc-300 transition-colors hover:text-red-400"
+                    >
+                      {link.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

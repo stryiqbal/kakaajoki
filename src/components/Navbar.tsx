@@ -10,7 +10,7 @@ import { AnimatePresence, motion } from "motion/react";
 const navLinks = [
   {
     label: "Home",
-    href: "/",
+    href: "/", 
     icon: ShoppingBag,
   },
   { 
@@ -46,7 +46,6 @@ const drawerVariants = {
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredHref, setHoveredHref] = useState<string | null>(null);
-  const [shouldScrollToHome, setShouldScrollToHome] = useState(false);
   const pathname = usePathname();
   const underlineHref = hoveredHref ?? pathname;
 
@@ -64,38 +63,17 @@ export default function Navbar() {
     };
   }, [isOpen]);
 
-  useEffect(() => {
-    if (!shouldScrollToHome) return;
-
-    const frame = window.requestAnimationFrame(() => {
-      document.getElementById("home")?.scrollIntoView({ behavior: "smooth", block: "start" });
-      setShouldScrollToHome(false);
-    });
-
-    return () => window.cancelAnimationFrame(frame);
-  }, [shouldScrollToHome]);
-
   function handleHomeLogoClick(event: MouseEvent<HTMLAnchorElement>) {
-    if (pathname !== "/") {
-      setIsOpen(false);
-      return;
-    }
-
     event.preventDefault();
-    if (isOpen) {
-      setIsOpen(false);
-      setShouldScrollToHome(true);
-      return;
-    }
-
-    document.getElementById("home")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    setIsOpen(false);
+    window.location.assign("/");
   }
 
   return (
     <>
     <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#151517]/75 text-white shadow-lg shadow-black/20 backdrop-blur-xl">
       <nav className="flex h-[64px] items-center justify-between px-3.5 sm:h-[68px] sm:px-6" aria-label="Navigasi utama">
-        <Link href="/#home" onClick={handleHomeLogoClick} aria-label="Kakaa.Joki beranda" className="shrink-0">
+        <Link href="/" onClick={handleHomeLogoClick} aria-label="Kakaa.Joki beranda" className="shrink-0">
           <Image
             src="/home/logo.png"
             alt="Kakaa.Joki"
@@ -180,7 +158,7 @@ export default function Navbar() {
         >
           <div className="flex h-[72px] shrink-0 items-center justify-between border-b border-white/10 px-4 sm:h-[88px] sm:px-5">
             <Link
-              href="/#home"
+              href="/"
               aria-label="Kakaa.Joki beranda"
               onClick={handleHomeLogoClick}
               className="shrink-0"
