@@ -53,33 +53,57 @@ function RecaptchaCheckbox({
       !isReady ||
       hasLoadError ||
       widgetIdRef.current !== null ||
-      !container ||
-      !window.grecaptcha
+      !container
     ) return;
 
-    try {
-      const widgetId = window.grecaptcha.render(container, {
-        sitekey: RECAPTCHA_SITE_KEY,
-        callback: onToken,
-        "expired-callback": () => onToken(""),
-        "error-callback": () => {
-          onToken("");
+    let attempts = 0;
+    let retryTimer: number | undefined;
+    let isDisposed = false;
+
+    const renderWhenApiIsReady = () => {
+      if (isDisposed) return;
+
+      if (typeof window.grecaptcha?.render !== "function") {
+        if (attempts >= 100) {
           onLoadError(true);
-        },
-      });
-      widgetIdRef.current = widgetId;
-      return () => {
+          return;
+        }
+        attempts += 1;
+        retryTimer = window.setTimeout(renderWhenApiIsReady, 50);
+        return;
+      }
+
+      try {
+        const widgetId = window.grecaptcha.render(container, {
+          sitekey: RECAPTCHA_SITE_KEY,
+          callback: onToken,
+          "expired-callback": () => onToken(""),
+          "error-callback": () => {
+            onToken("");
+            onLoadError(true);
+          },
+        });
+        widgetIdRef.current = widgetId;
+      } catch {
+        onLoadError(true);
+      }
+    };
+
+    renderWhenApiIsReady();
+
+    return () => {
+      isDisposed = true;
+      if (retryTimer !== undefined) window.clearTimeout(retryTimer);
+      const widgetId = widgetIdRef.current;
+      if (widgetId !== null) {
         try {
           window.grecaptcha?.reset(widgetId);
         } finally {
           widgetIdRef.current = null;
-          container.replaceChildren();
         }
-      };
-    } catch {
-      widgetIdRef.current = null;
-      onLoadError(true);
-    }
+      }
+      container.replaceChildren();
+    };
   }, [hasLoadError, isReady, onLoadError, onToken]);
 
 
