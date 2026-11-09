@@ -83,12 +83,7 @@ export default function Home() {
           className="page-background relative mt-16 scroll-mt-16 overflow-hidden px-4 pb-6 pt-6 sm:mt-[68px] sm:scroll-mt-[68px] sm:px-8 sm:pb-8 sm:pt-8 lg:px-10 lg:pb-10 lg:pt-10"
         >
           <div className="relative isolate flex aspect-[3120/1225] min-h-0 items-center overflow-hidden rounded-xl bg-[#151517]/50">
-            <motion.div
-              initial={{ opacity: 0, scale: 1.06 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              className="absolute inset-0"
-            >
+            <div className="absolute inset-0">
               <Image
                 src="/home/hero.png"
                 alt="Kakaa.Joki, layanan joki Mobile Legends"
@@ -98,19 +93,16 @@ export default function Home() {
                 sizes="(max-width: 639px) calc(100vw - 2rem), (max-width: 1023px) calc(100vw - 4rem), calc(100vw - 5rem)"
                 className="pointer-events-none object-cover object-center"
               />
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.7, delay: 0.1 }}
+            </div>
+            <div
               className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#080808]/55 via-transparent to-black/10"
             />
 
             <div
-              className="pointer-events-none absolute inset-0 z-10 overflow-hidden"
+              className="pointer-events-none absolute inset-0 z-10 hidden overflow-hidden md:block"
               aria-hidden="true"
             >
-              {Array.from({ length: 20 }, (_, meteorIndex) => ({
+              {Array.from({ length: 8 }, (_, meteorIndex) => ({
                 left: `${(meteorIndex * 37 + 7) % 100}%`,
                 top: `${(meteorIndex * 53 + 5) % 100}%`,
                 delay: (meteorIndex * 0.37) % 5.5,
@@ -208,7 +200,7 @@ export default function Home() {
                     transition: { staggerChildren: 0.08, delayChildren: 0.05 },
                   },
                 }}
-                className="grid w-full min-w-0 max-w-7xl grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 lg:gap-5 xl:grid-cols-6"
+                className="grid w-full min-w-0 max-w-7xl grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-4 lg:grid-cols-5 lg:gap-5 xl:grid-cols-6"
               >
                 {visibleServices.map((service) => (
                   <motion.button
@@ -232,7 +224,7 @@ export default function Home() {
                       alt={service.title}
                       fill
                       quality={70}
-                      sizes="(max-width: 639px) 50vw, (max-width: 1023px) 33vw, (max-width: 1279px) 25vw, 16.7vw"
+                      sizes="(max-width: 639px) 31vw, (max-width: 1023px) 31vw, (max-width: 1279px) 25vw, 16.7vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-[1.03] group-focus-visible:scale-[1.03]"
                     />
                     <span className="absolute inset-x-0 bottom-0 hidden min-h-24 translate-y-full flex-col items-start justify-end bg-gradient-to-t from-black/95 via-black/70 to-transparent px-4 pb-4 pt-10 text-left opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 sm:flex sm:px-5 sm:pb-5">
