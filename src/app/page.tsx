@@ -93,7 +93,8 @@ export default function Home() {
                 src="/home/hero.png"
                 alt="Kakaa.Joki, layanan joki Mobile Legends"
                 fill
-                priority
+                preload
+                quality={75}
                 sizes="(max-width: 639px) calc(100vw - 2rem), (max-width: 1023px) calc(100vw - 4rem), calc(100vw - 5rem)"
                 className="pointer-events-none object-cover object-center"
               />
@@ -230,8 +231,8 @@ export default function Home() {
                       src={service.image}
                       alt={service.title}
                       fill
-                      unoptimized
-                      sizes="(max-width: 1024px) 30vw, 16vw"
+                      quality={70}
+                      sizes="(max-width: 639px) 50vw, (max-width: 1023px) 33vw, (max-width: 1279px) 25vw, 16.7vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-[1.03] group-focus-visible:scale-[1.03]"
                     />
                     <span className="absolute inset-x-0 bottom-0 hidden min-h-24 translate-y-full flex-col items-start justify-end bg-gradient-to-t from-black/95 via-black/70 to-transparent px-4 pb-4 pt-10 text-left opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 sm:flex sm:px-5 sm:pb-5">
