@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
+import { X } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
+import Footer from "@/components/layout/Footer";
+import Navbar from "@/components/layout/Navbar";
 
 type InvalidResult = {
   status: "invalid";
@@ -20,6 +22,11 @@ type AlreadyMetResult = {
   desiredRate: number;
 };
 
+type UnreachableResult = {
+  status: "unreachable";
+  message: string;
+};
+
 type SuccessResult = {
   status: "success";
   message: string;
@@ -33,10 +40,45 @@ type SuccessResult = {
   finalRate: number;
 };
 
-type CalculatorResult = InvalidResult | AlreadyMetResult | SuccessResult;
+type CalculatorResult =
+  | InvalidResult
+  | AlreadyMetResult
+  | UnreachableResult
+  | SuccessResult;
 
 function formatPercentage(rate: number) {
   return Number.isInteger(rate) ? rate.toFixed(0) : rate.toString();
+}
+
+function getCalculatorValidationMessage(input: HTMLInputElement) {
+  if (input.validity.valueMissing) {
+    if (input.id === "total-match") {
+      return "Silahkan isi total pertandingan terlebih dahulu.";
+    }
+    if (input.id === "total-winrate") {
+      return "Silahkan isi win rate saat ini terlebih dahulu.";
+    }
+    return "Silahkan isi target win rate terlebih dahulu.";
+  }
+
+  if (input.validity.badInput) {
+    return "Masukkan angka yang valid.";
+  }
+  if (input.validity.rangeUnderflow) {
+    return input.id === "total-match"
+      ? "Total pertandingan minimal adalah 1."
+      : "Win rate minimal adalah 0%.";
+  }
+  if (input.validity.rangeOverflow) {
+    return "Win rate maksimal adalah 100%.";
+  }
+  if (input.validity.stepMismatch) {
+    return input.id === "total-match"
+      ? "Total pertandingan harus berupa bilangan bulat."
+      : "Win rate harus menggunakan kelipatan 0,1%.";
+  }
+
+  return "Masukkan angka yang valid.";
 }
 
 function calculateResult(
@@ -44,11 +86,21 @@ function calculateResult(
   winRate: string,
   targetRate: string,
 ): CalculatorResult {
-  const totalMatches = Number(matches) || 0;
-  const currentRate = Number(winRate) || 0;
-  const desiredRate = Number(targetRate) || 0;
+  if (!matches.trim() || !winRate.trim() || !targetRate.trim()) {
+    return {
+      status: "invalid",
+      message: "Silahkan isi semua field terlebih dahulu.",
+    };
+  }
+
+  const totalMatches = Number(matches);
+  const currentRate = Number(winRate);
+  const desiredRate = Number(targetRate);
 
   if (
+    !Number.isFinite(totalMatches) ||
+    !Number.isFinite(currentRate) ||
+    !Number.isFinite(desiredRate) ||
     totalMatches <= 0 ||
     currentRate < 0 ||
     desiredRate < 0 ||
@@ -62,6 +114,13 @@ function calculateResult(
   }
 
   const currentWins = (totalMatches * currentRate) / 100;
+
+  if (desiredRate === 100 && currentRate < 100) {
+    return {
+      status: "unreachable",
+      message: "Target win rate 100% tidak dapat dicapai jika sudah ada pertandingan yang kalah.",
+    };
+  }
 
   if (desiredRate <= currentRate) {
     return {
@@ -114,87 +173,159 @@ export default function CalculatorPage() {
   const [matches, setMatches] = useState<string>("");
   const [winRate, setWinRate] = useState<string>("");
   const [targetRate, setTargetRate] = useState<string>("");
-  const [displayResult, setDisplayResult] = useState<CalculatorResult | null>(null);
+  const [displayResult, setDisplayResult] = useState<CalculatorResult | null>(
+    null,
+  );
+  const [alertMessage, setAlertMessage] = useState("");
+  const alertTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(
+    () => () => {
+      if (alertTimeoutRef.current) clearTimeout(alertTimeoutRef.current);
+    },
+    [],
+  );
+
+  function showValidationAlert(message: string) {
+    setAlertMessage(message);
+    if (alertTimeoutRef.current) clearTimeout(alertTimeoutRef.current);
+    alertTimeoutRef.current = setTimeout(() => {
+      setAlertMessage("");
+      alertTimeoutRef.current = null;
+    }, 5000);
+  }
+
+  function clearValidationAlert() {
+    if (alertTimeoutRef.current) clearTimeout(alertTimeoutRef.current);
+    alertTimeoutRef.current = null;
+    setAlertMessage("");
+  }
 
   return (
     <>
       <Navbar />
 
-      <main className="relative min-h-screen overflow-x-hidden border-t border-white/5 bg-[radial-gradient(circle_at_top,_rgba(237,16,27,0.1),_transparent_35%)] px-4 pb-24 pt-28 text-white sm:px-6 sm:pt-32">
+      <main className="page-background relative min-h-screen overflow-x-hidden border-t border-white/5 px-4 pb-24 pt-28 text-white sm:px-6 sm:pt-32">
         <div className="mx-auto max-w-5xl">
           <div className="mx-auto max-w-2xl text-center">
             <Link href="/" className="inline-block focus:outline-none">
               <Image
-                src="/home/logo.png"
+                src="/home/logo.png?v=3"
                 alt="Logo"
-                width={112}
-                height={112}
+                width={3932}
+                height={3959}
+                unoptimized
                 priority
-                className="mx-auto h-24 w-auto sm:h-28"
+                className="mx-auto h-20 w-auto sm:h-24"
               />
             </Link>
-            <p className="mt-4 text-xs font-semibold uppercase tracking-[0.16em] text-red-400">
-              Kalkulator
-            </p>
             <h1 className="mt-3 font-[var(--font-chakra)] text-xl font-bold uppercase sm:text-3xl">
-              Win Rate Calculator
+              Kalkulator Win Rate
             </h1>
             <p className="mt-3 text-sm leading-relaxed text-zinc-300">
-              Hitung total jumlah pertandingan yang harus kamu menangkan secara berturut-turut untuk mencapai target win rate yang diinginkan.
+              Hitung total jumlah pertandingan yang harus kamu menangkan secara
+              berturut-turut untuk mencapai target win rate yang diinginkan.
             </p>
           </div>
 
           <div className="mx-auto mt-10 w-full max-w-xl">
             <form
+              onInvalidCapture={(event) => {
+                event.preventDefault();
+                const firstInvalid =
+                  event.currentTarget.querySelector<HTMLInputElement>(":invalid");
+                if (!firstInvalid) return;
+
+                showValidationAlert(getCalculatorValidationMessage(firstInvalid));
+                window.requestAnimationFrame(() => {
+                  firstInvalid.focus({ preventScroll: true });
+                  firstInvalid.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                  });
+                });
+              }}
               onSubmit={(e) => {
                 e.preventDefault();
-                setDisplayResult(calculateResult(matches, winRate, targetRate));
+                clearValidationAlert();
+                const result = calculateResult(matches, winRate, targetRate);
+                setDisplayResult(result);
+                if (
+                  result.status === "invalid" ||
+                  result.status === "unreachable"
+                ) {
+                  showValidationAlert(result.message);
+                }
               }}
               className="space-y-5"
             >
               <div className="space-y-4">
                 <div className="flex flex-col gap-y-1.5">
-                  <label htmlFor="total-match" className="block text-xs font-medium text-zinc-300">
+                  <label
+                    htmlFor="total-match"
+                    className="block text-xs font-medium text-zinc-300"
+                  >
                     Total Pertandingan Saat Ini
                   </label>
                   <input
                     id="total-match"
                     name="total-match"
                     type="number"
+                    min="1"
+                    step="1"
+                    required
                     value={matches}
-                    onChange={(e) => setMatches(e.target.value)}
+                    onChange={(e) => {
+                      setMatches(e.target.value);
+                    }}
                     placeholder="Contoh: 223"
                     className="block h-11 w-full rounded-lg border border-white/10 bg-white/[0.03] px-3.5 text-base text-white placeholder-zinc-500 transition focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500 sm:text-sm"
                   />
                 </div>
 
                 <div className="flex flex-col gap-y-1.5">
-                  <label htmlFor="total-winrate" className="block text-xs font-medium text-zinc-300">
+                  <label
+                    htmlFor="total-winrate"
+                    className="block text-xs font-medium text-zinc-300"
+                  >
                     Win Rate Saat Ini (%)
                   </label>
                   <input
                     id="total-winrate"
                     name="total-winrate"
                     type="number"
+                    min="0"
+                    max="100"
                     step="0.1"
+                    required
                     value={winRate}
-                    onChange={(e) => setWinRate(e.target.value)}
+                    onChange={(e) => {
+                      setWinRate(e.target.value);
+                    }}
                     placeholder="Contoh: 54"
                     className="block h-11 w-full rounded-lg border border-white/10 bg-white/[0.03] px-3.5 text-base text-white placeholder-zinc-500 transition focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500 sm:text-sm"
                   />
                 </div>
 
                 <div className="flex flex-col gap-y-1.5">
-                  <label htmlFor="winrate-request" className="block text-xs font-medium text-zinc-300">
+                  <label
+                    htmlFor="winrate-request"
+                    className="block text-xs font-medium text-zinc-300"
+                  >
                     Target Win Rate (%)
                   </label>
                   <input
                     id="winrate-request"
                     name="winrate-request"
                     type="number"
+                    min="0"
+                    max="100"
                     step="0.1"
+                    required
                     value={targetRate}
-                    onChange={(e) => setTargetRate(e.target.value)}
+                    onChange={(e) => {
+                      setTargetRate(e.target.value);
+                    }}
                     placeholder="Contoh: 70"
                     className="block h-11 w-full rounded-lg border border-white/10 bg-white/[0.03] px-3.5 text-base text-white placeholder-zinc-500 transition focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500 sm:text-sm"
                   />
@@ -209,10 +340,40 @@ export default function CalculatorPage() {
               </button>
             </form>
 
-            {displayResult && (
+            <AnimatePresence>
+              {alertMessage && (
+                <motion.div
+                  role="alert"
+                  initial={{ opacity: 0, y: -14, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{
+                    opacity: 0,
+                    y: -8,
+                    scale: 0.98,
+                    transition: { duration: 0.2, ease: "easeInOut" },
+                  }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 380,
+                    damping: 32,
+                    mass: 0.75,
+                  }}
+                  className="fixed left-1/2 top-24 z-[60] flex w-max max-w-[calc(100vw-2rem)] -translate-x-1/2 items-center gap-3 rounded-xl bg-white px-4 py-3 text-sm text-zinc-700 shadow-2xl"
+                >
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-500 text-white">
+                    <X size={15} strokeWidth={3} aria-hidden="true" />
+                  </span>
+                  <p className="min-w-0 font-medium">{alertMessage}</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {displayResult &&
+              displayResult.status !== "invalid" &&
+              displayResult.status !== "unreachable" && (
               <div
                 className="mt-5 w-full min-w-0 max-w-full rounded-xl border border-white/10 bg-white/[0.02] px-3 py-4 text-center text-xs font-bold uppercase leading-relaxed text-white shadow-xl sm:px-6 sm:py-5 sm:text-sm"
-                role={displayResult.status === "invalid" ? "alert" : "status"}
+                role="status"
                 aria-live="polite"
               >
                 {displayResult.status === "success" ? (
@@ -226,17 +387,12 @@ export default function CalculatorPage() {
                       {formatPercentage(displayResult.desiredRate)}% WIN RATE.
                     </span>
                   </p>
-                ) : displayResult.status === "already_met" ? (
+                ) : (
                   <p className="w-full min-w-0 whitespace-normal break-words">
                     WIN RATE SAAT INI SUDAH MENCAPAI ATAU MELEBIHI TARGET{" "}
                     <span className="text-red-400">
                       {formatPercentage(displayResult.desiredRate)}%.
                     </span>
-                  </p>
-                ) : (
-                  <p className="w-full min-w-0 whitespace-normal break-words">
-                    MASUKKAN ANGKA YANG <span className="text-red-400">VALID</span> UNTUK
-                    SEMUA FIELD.
                   </p>
                 )}
               </div>

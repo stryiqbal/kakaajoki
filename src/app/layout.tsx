@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Chakra_Petch, IBM_Plex_Sans_Condensed, Lexend_Deca } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
-import FloatingCS from "@/components/FloatingCS";
-import HistoryNavigationLoader from "@/components/HistoryNavigationLoader";
+import FloatingCS from "@/components/layout/FloatingCS";
+import HistoryNavigationLoader from "@/components/layout/HistoryNavigationLoader";
 import "./globals.css";
 
 const ibmPlexSansCondensed = IBM_Plex_Sans_Condensed({
@@ -29,15 +29,15 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "/home/logoicon.png",
-        sizes: "256x256",
+        url: "/home/logo.png?v=3",
+        sizes: "3932x3959",
         type: "image/png",
       },
     ],
     apple: [
       {
-        url: "/home/logoicon.png",
-        sizes: "256x256",
+        url: "/home/logo.png?v=3",
+        sizes: "3932x3959",
         type: "image/png",
       },
     ],
@@ -51,7 +51,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id">
-      <body className={`${ibmPlexSansCondensed.variable} ${lexendDeca.variable} ${chakraPetch.variable}`}>
+      <body
+        className={`${ibmPlexSansCondensed.variable} ${lexendDeca.variable} ${chakraPetch.variable}`}
+      >
         <NextTopLoader
           color="#ed101b"
           initialPosition={0.08}

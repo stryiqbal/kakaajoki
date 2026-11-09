@@ -1,0 +1,16 @@
+export const ACCOUNT_FIELD_LABELS: Record<string, string> = {
+  accountId: "Email/No. HP/Moonton ID",
+  booking: "Booking",
+  commander: "Request Commander",
+  contactPhone: "No. WhatsApp",
+  password: "Password Akun",
+  currentMmr: "MMR saat ini",
+  hero: "Request Hero",
+  loginVia: "Login via",
+  notes: "Catatan",
+  recordVia: "Record via",
+  requestHero: "Request Hero",
+  role: "Role",
+  userId: "User ID / Nickname",
+  videoLink: "Link contoh video",
+};
